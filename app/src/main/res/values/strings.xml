@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">One</string>
+
+    <string name="pref_first_open">pref_first_open</string>
+</resources>
