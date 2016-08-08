@@ -17,7 +17,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initTitleBar(TitleBar titleBar) {
         super.initTitleBar(titleBar);
-        titleBar.setTitleText("ONE");
+        titleBar.setTitleMode(TitleBar.Mode.MAIN);
         titleBar.setTitleBarBackgroundColor(Color.WHITE);
     }
 }

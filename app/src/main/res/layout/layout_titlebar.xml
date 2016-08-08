@@ -25,6 +25,15 @@
         tools:text="电影"
         />
     <ImageView
+        android:id="@+id/ivTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/nav_title"
+        android:visibility="gone"
+        />
+
+    <ImageView
         android:id="@+id/btnRight"
         android:layout_width="?android:attr/actionBarSize"
         android:layout_height="?android:attr/actionBarSize"

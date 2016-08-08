@@ -28,11 +28,13 @@ public class TitleBar extends RelativeLayout{
     EditText mSearchEditText;
     TextView mTitleText;
     RelativeLayout mTitleBarLayout;
+    ImageView mTitleImage;
+
 
     private Mode mTitleMode = Mode.NORMAL;
 
     public enum Mode{
-        NORMAL,SEARCH
+        NORMAL,SEARCH,MAIN
     }
 
     public TitleBar(Context context){
@@ -49,6 +51,7 @@ public class TitleBar extends RelativeLayout{
         mRightBtn = (ImageView) mTitleBarLayout.findViewById(R.id.btnRight);
         mSearchEditText = (EditText) mTitleBarLayout.findViewById(R.id.editSearch);
         mTitleText = (TextView) mTitleBarLayout.findViewById(R.id.tvTitle);
+        mTitleImage = (ImageView) mTitleBarLayout.findViewById(R.id.ivTitle);
 
         mTitleBarLayout.setOnClickListener(new OnClickListener() {
             @Override
@@ -98,6 +101,14 @@ public class TitleBar extends RelativeLayout{
         setRightBtnDrawable(ContextCompat.getDrawable(mContext,resId));
     }
 
+    public void setTitleImageDrawable(Drawable drawable){
+        mTitleImage.setImageDrawable(drawable);
+    }
+
+    public void setTitleImageDrawable(int resId){
+        setTitleImageDrawable(ContextCompat.getDrawable(mContext,resId));
+    }
+
     public void setTitleText(String text){
         mTitleText.setVisibility(VISIBLE);
         mTitleText.setText(text);
@@ -128,10 +139,17 @@ public class TitleBar extends RelativeLayout{
             mTitleBarLayout.setBackgroundColor(Color.WHITE);
             mTitleText.setVisibility(VISIBLE);
             mSearchEditText.setVisibility(GONE);
-        }else{
+            mTitleImage.setVisibility(GONE);
+        }else if(mode==Mode.SEARCH){
             mTitleBarLayout.setBackgroundColor(Color.GRAY);
             mTitleText.setVisibility(GONE);
             mSearchEditText.setVisibility(VISIBLE);
+            mTitleImage.setVisibility(GONE);
+        }else if(mode==Mode.MAIN){
+            mTitleBarLayout.setBackgroundColor(Color.WHITE);
+            mTitleText.setVisibility(GONE);
+            mSearchEditText.setVisibility(GONE);
+            mTitleImage.setVisibility(VISIBLE);
         }
     }
 
