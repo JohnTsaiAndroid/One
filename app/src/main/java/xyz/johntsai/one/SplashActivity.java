@@ -32,7 +32,7 @@ public class SplashActivity extends BaseActivity {
     private void handleDelayTo() {
         Intent intent = new Intent();
         if(SharedPrefsUtils.get(this,getString(R.string.pref_first_open))==null){
-            intent.setClass(this,GuideActivity.class);
+            intent.setClass(this,MainActivity.class);
         }else{
             intent.setClass(this,MainActivity.class);
         }
