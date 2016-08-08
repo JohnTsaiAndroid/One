@@ -35,6 +35,10 @@ public class TitleBar extends RelativeLayout{
         NORMAL,SEARCH
     }
 
+    public TitleBar(Context context){
+        this(context,null);
+    }
+
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -106,6 +110,15 @@ public class TitleBar extends RelativeLayout{
     public void setRightBtnDrawable(Drawable drawable){
         mRightBtn.setImageDrawable(drawable);
     }
+
+    public void setTitleBarBackground(int resId){
+        mTitleBarLayout.setBackgroundResource(resId);
+    }
+
+    public void setTitleBarBackgroundColor(int color){
+        mTitleBarLayout.setBackgroundColor(color);
+    }
+
 
     public void setTitleMode(Mode mode){
         mTitleMode = mode;
