@@ -14,7 +14,6 @@
         android:layout_height="?android:attr/actionBarSize"
         android:layout_alignParentLeft="true"
         android:src="@drawable/search"
-        android:padding="5dp"
         />
     <TextView
         android:id="@+id/tvTitle"
@@ -31,7 +30,6 @@
         android:layout_height="?android:attr/actionBarSize"
         android:layout_alignParentRight="true"
         android:src="@drawable/individual_center"
-        android:padding="5dp"
         />
 
     <EditText
