@@ -60,7 +60,7 @@ public class BaseFragment extends Fragment {
             View view = inflater.inflate(R.layout.fragment_base,container,false);
             mTitleBar = (TitleBar) view.findViewById(R.id.titleBar);
             mViewContainer = (ViewGroup) view.findViewById(R.id.container);
-            View childView = LayoutInflater.from(mContext).inflate(mChildRes,container,false);
+            View childView = LayoutInflater.from(mContext).inflate(mChildRes,mViewContainer,false);
             mViewContainer.addView(childView);
             mCacheView = view;
             initTitleBar(mTitleBar);

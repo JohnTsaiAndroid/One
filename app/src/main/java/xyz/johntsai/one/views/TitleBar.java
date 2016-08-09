@@ -80,7 +80,8 @@ public class TitleBar extends RelativeLayout{
             }
         });
 
-        mSearchEditText.addTextChangedListener(mTextWatcher);
+        if(mTextWatcher!=null)
+           mSearchEditText.addTextChangedListener(mTextWatcher);
     }
 
     private TextWatcher mTextWatcher;

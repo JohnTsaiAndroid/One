@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
         tabMovie = View.inflate(this,R.layout.tab_movie,null);
 
         mTabHost.setup(this,getSupportFragmentManager(),R.id.realtabcontent);
-        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_MAIN).setIndicator(tabMain),BaseFragment.class,null);
-        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_READ).setIndicator(tabRead),BaseFragment.class,null);
-        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_MUSIC).setIndicator(tabMusic),BaseFragment.class,null);
-        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_MOVIE).setIndicator(tabMovie),BaseFragment.class,null);
+        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_MAIN).setIndicator(tabMain),TabMainFragment.class,null);
+        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_READ).setIndicator(tabRead),TabReadFragment.class,null);
+        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_MUSIC).setIndicator(tabMusic),TabMusicFragment.class,null);
+        mTabHost.addTab(mTabHost.newTabSpec(STRING_TAG_MOVIE).setIndicator(tabMovie),TabMovieFragment.class,null);
 
         tabMain.setOnClickListener(onClickListener);
         tabMovie.setOnClickListener(onClickListener);
