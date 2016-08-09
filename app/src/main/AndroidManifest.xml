@@ -17,7 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.GuideActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
     </application>
    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

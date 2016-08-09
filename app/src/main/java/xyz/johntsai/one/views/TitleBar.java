@@ -80,7 +80,8 @@ public class TitleBar extends RelativeLayout{
             }
         });
 
-        mSearchEditText.addTextChangedListener(mTextWatcher);
+        if(mTextWatcher!=null)
+           mSearchEditText.addTextChangedListener(mTextWatcher);
     }
 
     private TextWatcher mTextWatcher;
@@ -130,6 +131,10 @@ public class TitleBar extends RelativeLayout{
         mTitleBarLayout.setBackgroundColor(color);
     }
 
+
+    public Mode getTitleMode(){
+        return mTitleMode;
+    }
 
     public void setTitleMode(Mode mode){
         mTitleMode = mode;
