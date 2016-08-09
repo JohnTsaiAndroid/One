@@ -23,6 +23,6 @@ public class TabMainFragment extends BaseFragment {
     @Override
     protected void initTitleBar(TitleBar titleBar) {
         super.initTitleBar(titleBar);
-        titleBar.setTitleText("首页");
+        titleBar.setTitleMode(TitleBar.Mode.MAIN);
     }
 }

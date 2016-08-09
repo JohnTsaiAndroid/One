@@ -16,7 +16,7 @@ public class TabMovieFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_tab_main);
+        setContentView(R.layout.fragment_tab_movie);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
