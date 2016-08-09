@@ -77,6 +77,4 @@ public class MainActivity extends AppCompatActivity {
     private void setTitleBar(View v) {
 
     }
-
-
 }

@@ -131,6 +131,10 @@ public class TitleBar extends RelativeLayout{
     }
 
 
+    public Mode getTitleMode(){
+        return mTitleMode;
+    }
+
     public void setTitleMode(Mode mode){
         mTitleMode = mode;
         mLeftBtn.setVisibility(VISIBLE);
