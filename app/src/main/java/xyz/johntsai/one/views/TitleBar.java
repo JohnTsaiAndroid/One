@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,12 +24,13 @@ public class TitleBar extends RelativeLayout{
 
     private Context mContext;
 
-    ImageView mLeftBtn;
-    ImageView mRightBtn;
+    LinearLayout mLeftBtn;
+    LinearLayout mRightBtn;
     EditText mSearchEditText;
     TextView mTitleText;
     RelativeLayout mTitleBarLayout;
     ImageView mTitleImage;
+    ImageView mLeftImage,mRightImage;
 
 
     private Mode mTitleMode = Mode.NORMAL;
@@ -47,11 +49,13 @@ public class TitleBar extends RelativeLayout{
         mContext = context;
 
         mTitleBarLayout = (RelativeLayout) inflate(context, R.layout.layout_titlebar,this);
-        mLeftBtn = (ImageView) mTitleBarLayout.findViewById(R.id.btnLeft);
-        mRightBtn = (ImageView) mTitleBarLayout.findViewById(R.id.btnRight);
+        mLeftBtn = (LinearLayout) mTitleBarLayout.findViewById(R.id.layoutLeft);
+        mRightBtn = (LinearLayout) mTitleBarLayout.findViewById(R.id.layoutRight);
         mSearchEditText = (EditText) mTitleBarLayout.findViewById(R.id.editSearch);
         mTitleText = (TextView) mTitleBarLayout.findViewById(R.id.tvTitle);
         mTitleImage = (ImageView) mTitleBarLayout.findViewById(R.id.ivTitle);
+        mLeftImage = (ImageView) mTitleBarLayout.findViewById(R.id.imageLeft);
+        mRightImage = (ImageView) mTitleBarLayout.findViewById(R.id.imageRight);
 
         mTitleBarLayout.setOnClickListener(new OnClickListener() {
             @Override
@@ -91,7 +95,7 @@ public class TitleBar extends RelativeLayout{
     }
 
     public void setLeftBtnDrawable(Drawable drawable){
-        mLeftBtn.setImageDrawable(drawable);
+        mLeftImage.setImageDrawable(drawable);
     }
 
     public void setLeftBtnDrawable(int resId){
@@ -120,7 +124,7 @@ public class TitleBar extends RelativeLayout{
     }
 
     public void setRightBtnDrawable(Drawable drawable){
-        mRightBtn.setImageDrawable(drawable);
+        mRightImage.setImageDrawable(drawable);
     }
 
     public void setTitleBarBackground(int resId){
