@@ -2,6 +2,7 @@ package xyz.johntsai.one.api;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import xyz.johntsai.one.utils.Constant;
 
@@ -15,7 +16,8 @@ public class ApiFactory {
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder().baseUrl(Constant.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create());
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
 
     public static <S> S create(Class<S> serviceClazz){
         Retrofit retrofit = builder.client(httpClient.build()).build();

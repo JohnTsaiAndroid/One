@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
 import xyz.johntsai.one.R;
 import xyz.johntsai.one.views.TitleBar;
 
@@ -71,6 +72,7 @@ public class BaseFragment extends Fragment {
             parent.removeView(mCacheView);
         }
         mShouldRefresh = true;
+        ButterKnife.bind(this,mCacheView);
         return mCacheView;
     }
 
