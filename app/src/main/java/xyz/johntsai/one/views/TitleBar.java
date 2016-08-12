@@ -135,6 +135,9 @@ public class TitleBar extends RelativeLayout{
         mTitleBarLayout.setBackgroundColor(color);
     }
 
+    public CharSequence getEditTextString(){
+        return mSearchEditText.getText().toString();
+    }
 
     public Mode getTitleMode(){
         return mTitleMode;
@@ -150,10 +153,12 @@ public class TitleBar extends RelativeLayout{
             mSearchEditText.setVisibility(GONE);
             mTitleImage.setVisibility(GONE);
         }else if(mode==Mode.SEARCH){
-            mTitleBarLayout.setBackgroundColor(Color.GRAY);
             mTitleText.setVisibility(GONE);
             mSearchEditText.setVisibility(VISIBLE);
             mTitleImage.setVisibility(GONE);
+            mLeftImage.setImageResource(R.drawable.com_bt_return);
+            mRightImage.setImageResource(R.drawable.search);
+            mTitleBarLayout.setBackgroundColor(Color.parseColor("#fff3f3f3"));
         }else if(mode==Mode.MAIN){
             mTitleBarLayout.setBackgroundColor(Color.WHITE);
             mTitleText.setVisibility(GONE);
