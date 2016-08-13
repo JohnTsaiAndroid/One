@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,8 @@ import xyz.johntsai.one.R;
 import xyz.johntsai.one.api.OneService;
 import xyz.johntsai.one.api.OneServiceFactory;
 import xyz.johntsai.one.entity.HpDetailListEntity;
+import xyz.johntsai.one.listhelper.SimpleModelAdapter;
+import xyz.johntsai.one.listservice.SearchListService;
 import xyz.johntsai.one.views.TitleBar;
 
 /**
@@ -48,7 +51,12 @@ public class SearchActivity extends BaseActivity{
     @BindView(R.id.tvAuthor)
     TextView mTextAuthor;
 
+    @BindView((R.id.searchListView))
+    ListView mListView;
+
     private int mCurrentIndex = 0;
+
+    private SimpleModelAdapter mAdapter;
 
     @Override
     protected void initTitleBar(final TitleBar titleBar) {
@@ -73,10 +81,13 @@ public class SearchActivity extends BaseActivity{
         if(TextUtils.isEmpty(editTextString))
             return;
         Log.d(TAG,editTextString.toString());
-        mSearchImage.setVisibility(View.GONE);
+        if(mSearchImage.getVisibility()!=View.GONE)
+           mSearchImage.setVisibility(View.GONE);
         if(mSearchResultLayout.getVisibility()!=View.VISIBLE)
            mSearchResultLayout.setVisibility(View.VISIBLE);
-
+        if(mAdapter.getList()!=null) {
+            mAdapter.clearList();
+        }
         OneService oneService = OneServiceFactory.INSTANCE.get();
         oneService.searchHp(editTextString.toString())
                 .subscribeOn(Schedulers.io())
@@ -93,8 +104,9 @@ public class SearchActivity extends BaseActivity{
                     }
 
                     @Override
-                    public void onNext(HpDetailListEntity hpDetailListEntity) {
-                        Log.d(TAG,hpDetailListEntity.toString());
+                    public void onNext(HpDetailListEntity hpDetailListEntity){
+                        mAdapter.addList(SearchListService.getHpList(hpDetailListEntity));
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
 
@@ -114,6 +126,9 @@ public class SearchActivity extends BaseActivity{
         mTextMovie.setOnClickListener(new TextClickListener());
         mTextMusic.setOnClickListener(new TextClickListener());
         mTextHp.setSelected(true);
+
+        mAdapter = new SimpleModelAdapter(this, SearchListService.getFactory());
+        mListView.setAdapter(mAdapter);
     }
 
     private class TextClickListener implements View.OnClickListener{

@@ -163,22 +163,5 @@ public class ModelFactory {
         private String getModelTypeName(Class<?> modelView) {
             return modelView.getName();
         }
-
-        // FIXME 动态加载
-        //        private Builder addListToMap(List<SimpleItemEntity> entityList){
-        //            for(int i = 0; i < entityList.size(); i ++){
-        //                SimpleItemEntity entity = entityList.get(i);
-        //
-        //                String modelType = "default_model_type";
-        //                if(entity.getModelType() == null){
-        //                    modelType = modelType + modelTypeSuf;
-        //                    modelTypeSuf ++;
-        //                }else{
-        //                    modelType = entity.getModelType();
-        //                }
-        //                addModel(modelType, entity.getModelView(), entity.isPinned());
-        //            }
-        //            return this;
-        //        }
     }
 }

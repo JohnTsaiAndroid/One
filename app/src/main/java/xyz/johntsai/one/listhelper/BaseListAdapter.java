@@ -74,12 +74,6 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         this.list.removeAll(list);
     }
 
-    //    public void addLazyList(List<T> list){
-    //        if(list != null){
-    //            this.lazyList.addAll(list);
-    //        }
-    //    }
-
     /**
      * 将缓存的数据添加到list
      */

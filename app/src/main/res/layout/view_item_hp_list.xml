@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <ImageView
+        android:id="@+id/ivHp"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        tools:src="@color/color_97bce8"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        />
+    <ImageView
+        android:id="@+id/ivFoward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/forward"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        />
+     <TextView
+         android:id="@+id/tvTitle"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:paddingTop="8dp"
+         android:paddingBottom="8dp"
+         tools:text="Silencefeji作品"
+         android:layout_toRightOf="@id/ivHp"
+         android:textColor="@color/colorBlack"
+         android:textSize="@dimen/font_16sp"
+         />
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivHp"
+        android:layout_below="@id/ivFoward"
+        android:textSize="@dimen/font_14sp"
+        android:layout_marginRight="10dp"
+        tools:text="减肥 i 俄方接机放假诶鸡尾酒佛为 i 俄警方 i 哦降温"
+        android:lines="1"
+        android:ellipsize="end"
+        />
+</RelativeLayout>

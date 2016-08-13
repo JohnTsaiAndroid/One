@@ -25,6 +25,8 @@ import java.util.Map;
  */
 public class SimpleItemEntity<T> implements Serializable {
 
+    private static final long serialVersionUID = -7215916857087065122L;
+
     private long id;
     /**
      * 模板显示内容数据
