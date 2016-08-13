@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.johntsai.one.R;
+import xyz.johntsai.one.utils.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,5 +78,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTitleBar(View v) {
 
+    }
+
+    private long beforeTime = 0L;
+
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis()-beforeTime<1000L) {
+            super.onBackPressed();
+        }else{
+            beforeTime = System.currentTimeMillis();
+            ToastUtils.showLong(this,"再按一次退出一个");
+        }
     }
 }
