@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -75,10 +77,20 @@ public class SearchActivity extends BaseActivity{
                 search(titleBar.getEditTextString());
             }
         });
+        titleBar.getSearchEdittext().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId== EditorInfo.IME_ACTION_GO||event.getKeyCode()==KeyEvent.KEYCODE_ENTER){
+                    search(titleBar.getEditTextString());
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void search(CharSequence editTextString) {
-        if(TextUtils.isEmpty(editTextString))
+        if(TextUtils.isEmpty(editTextString.toString().trim()))
             return;
         Log.d(TAG,editTextString.toString());
         if(mSearchImage.getVisibility()!=View.GONE)

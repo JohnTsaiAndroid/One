@@ -16,7 +16,7 @@ public class ImageLoad {
     }
 
     public static void load(Context context, ImageView view,String url){
-        Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.RESULT).into(view);
+        Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.RESULT).crossFade().into(view);
     }
 
 

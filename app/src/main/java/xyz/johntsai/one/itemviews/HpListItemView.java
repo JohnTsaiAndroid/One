@@ -42,7 +42,7 @@ public class HpListItemView extends BaseItemModel<HpDetailListEntity.DataEntity>
         ButterKnife.bind(this);
 
         ImageLoad.load(getContext(),imageView,model.getContent().getHp_img_url());
-        tvTitle.setText(model.getContent().getHp_title());
+        tvTitle.setText(model.getContent().getHp_author());
         tvContent.setText(model.getContent().getHp_content());
 
     }
