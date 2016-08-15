@@ -1,19 +1,18 @@
 package xyz.johntsai.one.ui;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,8 +20,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import xyz.johntsai.one.R;
+import xyz.johntsai.one.api.ApiFactory;
 import xyz.johntsai.one.api.OneService;
-import xyz.johntsai.one.api.OneServiceFactory;
 import xyz.johntsai.one.entity.HpDetailListEntity;
 import xyz.johntsai.one.listhelper.SimpleModelAdapter;
 import xyz.johntsai.one.listservice.SearchListService;
@@ -55,6 +54,9 @@ public class SearchActivity extends BaseActivity{
 
     @BindView((R.id.searchListView))
     ListView mListView;
+
+    @BindView(R.id.loadImage)
+    ImageView mLoadImage;
 
     private int mCurrentIndex = 0;
 
@@ -92,6 +94,9 @@ public class SearchActivity extends BaseActivity{
     private void search(CharSequence editTextString) {
         if(TextUtils.isEmpty(editTextString.toString().trim()))
             return;
+        mLoadImage.setVisibility(View.VISIBLE);
+        final AnimationDrawable animationDrawable = (AnimationDrawable) mLoadImage.getBackground();
+        animationDrawable.start();
         Log.d(TAG,editTextString.toString());
         if(mSearchImage.getVisibility()!=View.GONE)
            mSearchImage.setVisibility(View.GONE);
@@ -100,14 +105,15 @@ public class SearchActivity extends BaseActivity{
         if(mAdapter.getList()!=null) {
             mAdapter.clearList();
         }
-        OneService oneService = OneServiceFactory.INSTANCE.get();
+        OneService oneService = ApiFactory.create(OneService.class);
+
         oneService.searchHp(editTextString.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<HpDetailListEntity>() {
                     @Override
                     public void onCompleted() {
-
+                        mLoadImage.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -119,6 +125,9 @@ public class SearchActivity extends BaseActivity{
                     public void onNext(HpDetailListEntity hpDetailListEntity){
                         mAdapter.addList(SearchListService.getHpList(hpDetailListEntity));
                         mAdapter.notifyDataSetChanged();
+                        if(mListView.getFirstVisiblePosition()!=0){
+                            mListView.setSelection(0);
+                        }
                     }
                 });
 
@@ -141,6 +150,8 @@ public class SearchActivity extends BaseActivity{
 
         mAdapter = new SimpleModelAdapter(this, SearchListService.getFactory());
         mListView.setAdapter(mAdapter);
+
+        mLoadImage.setBackgroundResource(R.drawable.loading_anim);
     }
 
     private class TextClickListener implements View.OnClickListener{
