@@ -139,6 +139,10 @@ public class TitleBar extends RelativeLayout{
         return mSearchEditText.getText().toString();
     }
 
+    public EditText getSearchEdittext(){
+        return mSearchEditText;
+    }
+
     public Mode getTitleMode(){
         return mTitleMode;
     }

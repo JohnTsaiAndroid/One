@@ -34,6 +34,8 @@
          android:layout_toRightOf="@id/ivHp"
          android:textColor="@color/colorBlack"
          android:textSize="@dimen/font_16sp"
+         android:lines="1"
+         android:ellipsize="end"
          />
     <TextView
         android:id="@+id/tvContent"
@@ -46,5 +48,12 @@
         tools:text="减肥 i 俄方接机放假诶鸡尾酒佛为 i 俄警方 i 哦降温"
         android:lines="1"
         android:ellipsize="end"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#dddddd"
+        android:layout_toRightOf="@id/ivHp"
         />
 </RelativeLayout>
