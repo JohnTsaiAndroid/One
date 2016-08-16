@@ -22,14 +22,17 @@ public class SplashActivity extends AppCompatActivity {
         delay();
     }
 
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            handleDelayTo();
+        }
+    };
+
     private void delay() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handleDelayTo();
-            }
-        },3*1000);
+        handler.postDelayed(runnable,3*1000);
     }
 
     private void handleDelayTo() {
@@ -41,5 +44,11 @@ public class SplashActivity extends AppCompatActivity {
         }
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        handler.removeCallbacks(runnable);
+//        super.onBackPressed();
     }
 }
