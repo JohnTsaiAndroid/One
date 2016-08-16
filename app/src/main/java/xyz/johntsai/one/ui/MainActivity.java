@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private long beforeTime = 0L;
+    private static long beforeTime = 0L;
 
     @Override
     public void onBackPressed() {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }else{
             beforeTime = System.currentTimeMillis();
-            ToastUtils.showLong(this,"再按一次退出一个");
+            ToastUtils.showShort(this,"再按一次退出一个");
         }
     }
 }

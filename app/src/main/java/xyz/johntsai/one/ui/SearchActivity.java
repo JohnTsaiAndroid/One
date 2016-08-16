@@ -4,25 +4,33 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
+import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 import xyz.johntsai.one.R;
 import xyz.johntsai.one.api.ApiFactory;
 import xyz.johntsai.one.api.OneService;
-import xyz.johntsai.one.entity.HpDetailListEntity;
+import xyz.johntsai.one.entity.BaseDataEntity;
+import xyz.johntsai.one.entity.Hp;
+import xyz.johntsai.one.entity.Music;
+import xyz.johntsai.one.entity.Read;
 import xyz.johntsai.one.listhelper.SimpleModelAdapter;
 import xyz.johntsai.one.listservice.SearchListService;
 import xyz.johntsai.one.views.TitleBar;
@@ -31,7 +39,7 @@ import xyz.johntsai.one.views.TitleBar;
  * Created by JohnTsai(mailto:johntsai.work@gmail.com) on 16/8/11.
  * 搜索Activity
  */
-public class SearchActivity extends BaseActivity{
+public class SearchActivity extends BaseActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -62,11 +70,13 @@ public class SearchActivity extends BaseActivity{
 
     private SimpleModelAdapter mAdapter;
 
+    private SparseArray<BaseDataEntity> mDataArray;
+
     @Override
     protected void initTitleBar(final TitleBar titleBar) {
         super.initTitleBar(titleBar);
         titleBar.setTitleMode(TitleBar.Mode.SEARCH);
-        titleBar.setOnTitleClickListener(new TitleBar.OnTitleBarClickCompat(){
+        titleBar.setOnTitleClickListener(new TitleBar.OnTitleBarClickCompat() {
             @Override
             public void onLeftButtonClick(View view) {
                 super.onLeftButtonClick(view);
@@ -82,7 +92,7 @@ public class SearchActivity extends BaseActivity{
         titleBar.getSearchEdittext().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId== EditorInfo.IME_ACTION_GO||event.getKeyCode()==KeyEvent.KEYCODE_ENTER){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     search(titleBar.getEditTextString());
                     return true;
                 }
@@ -92,46 +102,92 @@ public class SearchActivity extends BaseActivity{
     }
 
     private void search(CharSequence editTextString) {
-        if(TextUtils.isEmpty(editTextString.toString().trim()))
+        if (TextUtils.isEmpty(editTextString.toString().trim()))
             return;
+
+        String searchStr = editTextString.toString();
+        if (mSearchImage.getVisibility() != View.GONE)
+            mSearchImage.setVisibility(View.GONE);
+        if (mSearchResultLayout.getVisibility() != View.VISIBLE)
+            mSearchResultLayout.setVisibility(View.VISIBLE);
+
         mLoadImage.setVisibility(View.VISIBLE);
         final AnimationDrawable animationDrawable = (AnimationDrawable) mLoadImage.getBackground();
         animationDrawable.start();
-        Log.d(TAG,editTextString.toString());
-        if(mSearchImage.getVisibility()!=View.GONE)
-           mSearchImage.setVisibility(View.GONE);
-        if(mSearchResultLayout.getVisibility()!=View.VISIBLE)
-           mSearchResultLayout.setVisibility(View.VISIBLE);
-        if(mAdapter.getList()!=null) {
-            mAdapter.clearList();
-        }
+
         OneService oneService = ApiFactory.create(OneService.class);
 
-        oneService.searchHp(editTextString.toString())
-                .subscribeOn(Schedulers.io())
+        Observable<BaseDataEntity<List<Hp>>> hpObservable
+                = oneService.searchHp(searchStr);
+
+        Observable<BaseDataEntity<List<Read>>> readObservable
+                = oneService.searchReading(searchStr);
+
+        Observable<BaseDataEntity<List<Music>>> musicObservable
+                = oneService.searchMusic(searchStr);
+
+        Observable.zip(hpObservable, readObservable,musicObservable, new Func3<BaseDataEntity<List<Hp>>, BaseDataEntity<List<Read>>,BaseDataEntity<List<Music>> ,SparseArray<BaseDataEntity>>() {
+            @Override
+            public SparseArray<BaseDataEntity> call(BaseDataEntity<List<Hp>> listBaseDataEntity, BaseDataEntity<List<Read>> listBaseDataEntity2,BaseDataEntity<List<Music>> listBaseDataEntity3) {
+                SparseArray<BaseDataEntity> array = new SparseArray<>(5);
+                array.put(0,listBaseDataEntity);
+                array.put(1,listBaseDataEntity2);
+                array.put(2,listBaseDataEntity3);
+                return array;
+            }
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<HpDetailListEntity>() {
-                    @Override
-                    public void onCompleted() {
-                        mLoadImage.setVisibility(View.GONE);
-                    }
+                .subscribe(new Subscriber<SparseArray<BaseDataEntity>>() {
+            @Override
+            public void onCompleted() {
 
-                    @Override
-                    public void onError(Throwable e) {
+            }
 
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onNext(HpDetailListEntity hpDetailListEntity){
-                        mAdapter.addList(SearchListService.getHpList(hpDetailListEntity));
-                        mAdapter.notifyDataSetChanged();
-                        if(mListView.getFirstVisiblePosition()!=0){
-                            mListView.setSelection(0);
-                        }
-                    }
-                });
+            }
 
+            @Override
+            public void onNext(SparseArray<BaseDataEntity> baseDataEntitySparseArray) {
+                mDataArray = baseDataEntitySparseArray;
+                addList();
+            }
+        });
+    }
 
+    private void addList() {
+        if (mAdapter.getList() != null) {
+            mAdapter.clearList();
+        }
+
+        if(mDataArray==null)return;
+
+        BaseDataEntity baseDataEntity = mDataArray.get(mCurrentIndex);
+
+        switch (mCurrentIndex) {
+            case 0:
+                if (baseDataEntity != null)
+                    mAdapter.addList(SearchListService.getHpList(baseDataEntity));
+                break;
+            case 1:
+                if (baseDataEntity != null) {
+                    mAdapter.addList(SearchListService.getReadList(baseDataEntity));
+                }
+                break;
+            case 2:
+                if(baseDataEntity!=null){
+                    mAdapter.addList(SearchListService.getMusicList(baseDataEntity));
+                }
+                break;
+            default:
+                break;
+        }
+        mLoadImage.setVisibility(View.GONE);
+        mAdapter.notifyDataSetChanged();
+        if(mListView.getFirstVisiblePosition()!=0){
+            mListView.setSelection(0);
+        }
     }
 
     @Override
@@ -154,7 +210,7 @@ public class SearchActivity extends BaseActivity{
         mLoadImage.setBackgroundResource(R.drawable.loading_anim);
     }
 
-    private class TextClickListener implements View.OnClickListener{
+    private class TextClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -163,7 +219,7 @@ public class SearchActivity extends BaseActivity{
     }
 
     private void setSelectText(View v) {
-        switch (mCurrentIndex){
+        switch (mCurrentIndex) {
             case 0:
                 mTextHp.setSelected(false);
                 break;
@@ -179,7 +235,7 @@ public class SearchActivity extends BaseActivity{
             case 4:
                 mTextAuthor.setSelected(false);
         }
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tvHp:
                 mCurrentIndex = 0;
                 break;
@@ -197,5 +253,6 @@ public class SearchActivity extends BaseActivity{
                 break;
         }
         v.setSelected(true);
+        addList();
     }
 }
