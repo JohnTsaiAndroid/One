@@ -40,7 +40,7 @@ public class MusicListItemView extends BaseItemModel<Music> {
     public void bindView() {
         Music music = model.getContent();
         if(music==null)return;
-        ImageLoad.load(getContext(),mImageCover,music.getCover());
+        ImageLoad.load(mImageCover,music.getCover());
         mTextTitle.setText(music.getTitle());
         mTextAuthor.setText(music.getAuthor().getUser_name());
     }
