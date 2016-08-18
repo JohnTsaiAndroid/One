@@ -40,7 +40,7 @@ public class HpListItemView extends BaseItemModel<Hp> {
     @Override
     public void bindView() {
         ButterKnife.bind(this);
-        ImageLoad.load(getContext(),imageView,model.getContent().getHp_img_url());
+        ImageLoad.load(imageView,model.getContent().getHp_img_url());
         tvTitle.setText(model.getContent().getHp_author());
         tvContent.setText(model.getContent().getHp_content());
 
