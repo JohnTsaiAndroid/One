@@ -23,12 +23,14 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func2;
 import rx.functions.Func3;
+import rx.functions.Func4;
 import rx.schedulers.Schedulers;
 import xyz.johntsai.one.R;
 import xyz.johntsai.one.api.ApiFactory;
 import xyz.johntsai.one.api.OneService;
 import xyz.johntsai.one.entity.BaseDataEntity;
 import xyz.johntsai.one.entity.Hp;
+import xyz.johntsai.one.entity.Movie;
 import xyz.johntsai.one.entity.Music;
 import xyz.johntsai.one.entity.Read;
 import xyz.johntsai.one.listhelper.SimpleModelAdapter;
@@ -126,13 +128,19 @@ public class SearchActivity extends BaseActivity {
         Observable<BaseDataEntity<List<Music>>> musicObservable
                 = oneService.searchMusic(searchStr);
 
-        Observable.zip(hpObservable, readObservable,musicObservable, new Func3<BaseDataEntity<List<Hp>>, BaseDataEntity<List<Read>>,BaseDataEntity<List<Music>> ,SparseArray<BaseDataEntity>>() {
+        Observable<BaseDataEntity<List<Movie>>> movieObservable
+                = oneService.searchMovie(searchStr);
+
+        Observable.zip(hpObservable, readObservable,musicObservable,
+                movieObservable,
+                new Func4<BaseDataEntity<List<Hp>>, BaseDataEntity<List<Read>>,BaseDataEntity<List<Music>> ,BaseDataEntity<List<Movie>>,SparseArray<BaseDataEntity>>() {
             @Override
-            public SparseArray<BaseDataEntity> call(BaseDataEntity<List<Hp>> listBaseDataEntity, BaseDataEntity<List<Read>> listBaseDataEntity2,BaseDataEntity<List<Music>> listBaseDataEntity3) {
+            public SparseArray<BaseDataEntity> call(BaseDataEntity<List<Hp>> listBaseDataEntity, BaseDataEntity<List<Read>> listBaseDataEntity2,BaseDataEntity<List<Music>> listBaseDataEntity3,BaseDataEntity<List<Movie>> listBaseDataEntity4) {
                 SparseArray<BaseDataEntity> array = new SparseArray<>(5);
                 array.put(0,listBaseDataEntity);
                 array.put(1,listBaseDataEntity2);
                 array.put(2,listBaseDataEntity3);
+                array.put(3,listBaseDataEntity4);
                 return array;
             }
         }).subscribeOn(Schedulers.io())
@@ -178,6 +186,11 @@ public class SearchActivity extends BaseActivity {
             case 2:
                 if(baseDataEntity!=null){
                     mAdapter.addList(SearchListService.getMusicList(baseDataEntity));
+                }
+                break;
+            case 3:
+                if(baseDataEntity!=null){
+                    mAdapter.addList(SearchListService.getMovieList(baseDataEntity));
                 }
                 break;
             default:

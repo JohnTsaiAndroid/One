@@ -5,9 +5,11 @@ import java.util.List;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
+import xyz.johntsai.one.entity.Author;
 import xyz.johntsai.one.entity.BaseDataEntity;
 import xyz.johntsai.one.entity.BaseEntity;
 import xyz.johntsai.one.entity.Hp;
+import xyz.johntsai.one.entity.Movie;
 import xyz.johntsai.one.entity.Music;
 import xyz.johntsai.one.entity.Read;
 
@@ -33,9 +35,9 @@ public interface OneService {
     Observable<BaseDataEntity<List<Read>>> searchReading(@Path("content")String content);
 
     @GET("api/search/author/{content}")
-    Observable<BaseEntity> searchAuthor(@Path("content")String content);
+    Observable<BaseDataEntity<List<Author>>> searchAuthor(@Path("content")String content);
 
     @GET("api/search/movie/{content}")
-    Observable<BaseEntity> searchMovie(@Path("content")String content);
+    Observable<BaseDataEntity<List<Movie>>> searchMovie(@Path("content")String content);
 
 }
