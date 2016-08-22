@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,13 +20,12 @@ import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func2;
-import rx.functions.Func3;
-import rx.functions.Func4;
+import rx.functions.Func5;
 import rx.schedulers.Schedulers;
 import xyz.johntsai.one.R;
 import xyz.johntsai.one.api.ApiFactory;
 import xyz.johntsai.one.api.OneService;
+import xyz.johntsai.one.entity.Author;
 import xyz.johntsai.one.entity.BaseDataEntity;
 import xyz.johntsai.one.entity.Hp;
 import xyz.johntsai.one.entity.Movie;
@@ -131,19 +129,33 @@ public class SearchActivity extends BaseActivity {
         Observable<BaseDataEntity<List<Movie>>> movieObservable
                 = oneService.searchMovie(searchStr);
 
+        Observable<BaseDataEntity<List<Author>>> authorObservable
+                = oneService.searchAuthor(searchStr);
+
         Observable.zip(hpObservable, readObservable,musicObservable,
-                movieObservable,
-                new Func4<BaseDataEntity<List<Hp>>, BaseDataEntity<List<Read>>,BaseDataEntity<List<Music>> ,BaseDataEntity<List<Movie>>,SparseArray<BaseDataEntity>>() {
-            @Override
-            public SparseArray<BaseDataEntity> call(BaseDataEntity<List<Hp>> listBaseDataEntity, BaseDataEntity<List<Read>> listBaseDataEntity2,BaseDataEntity<List<Music>> listBaseDataEntity3,BaseDataEntity<List<Movie>> listBaseDataEntity4) {
-                SparseArray<BaseDataEntity> array = new SparseArray<>(5);
-                array.put(0,listBaseDataEntity);
-                array.put(1,listBaseDataEntity2);
-                array.put(2,listBaseDataEntity3);
-                array.put(3,listBaseDataEntity4);
-                return array;
-            }
-        }).subscribeOn(Schedulers.io())
+                movieObservable,authorObservable,
+                new Func5<BaseDataEntity<List<Hp>>,
+                                        BaseDataEntity<List<Read>>,
+                                        BaseDataEntity<List<Music>> ,
+                                        BaseDataEntity<List<Movie>>,
+                                        BaseDataEntity<List<Author>>,
+                                        SparseArray<BaseDataEntity>>() {
+                    @Override
+                    public SparseArray<BaseDataEntity> call
+                            (BaseDataEntity<List<Hp>> listBaseDataEntity,
+                             BaseDataEntity<List<Read>> listBaseDataEntity2,
+                             BaseDataEntity<List<Music>> listBaseDataEntity3,
+                             BaseDataEntity<List<Movie>> listBaseDataEntity4,
+                             BaseDataEntity<List<Author>> listBaseDataEntity5) {
+                        SparseArray<BaseDataEntity> array = new SparseArray<>(5);
+                         array.put(0,listBaseDataEntity);
+                         array.put(1,listBaseDataEntity2);
+                         array.put(2,listBaseDataEntity3);
+                         array.put(3,listBaseDataEntity4);
+                        array.put(4,listBaseDataEntity5);
+                         return array;
+                    }})
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SparseArray<BaseDataEntity>>() {
             @Override
@@ -193,6 +205,10 @@ public class SearchActivity extends BaseActivity {
                     mAdapter.addList(SearchListService.getMovieList(baseDataEntity));
                 }
                 break;
+            case 4:
+                if(baseDataEntity!=null){
+                    mAdapter.addList(SearchListService.getAuthorList(baseDataEntity));
+                }
             default:
                 break;
         }
